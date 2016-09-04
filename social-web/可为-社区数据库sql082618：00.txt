@@ -4,7 +4,7 @@
 #create database if not exists befriend DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 #´æÔÚ¾ÍÉ¾³ý    1
 
-#1
+#12
                
 DROP TABLE IF EXISTS social_interaction_befriend;
 CREATE TABLE social_interaction_befriend(
