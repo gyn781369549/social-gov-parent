@@ -1,0 +1,150 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport"
+			content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta name="format-detection" content="telephone=yes">
+		<title>行政区划管理</title>
+		<link href="../../css/zTreeStyle.css" rel="stylesheet" type="text/css">
+		<link href="../../css/nanming_iframeStyle.css" rel="stylesheet" type="text/css">
+		<link type="text/css" href="../../static/talent_validate/js/validate/css/validate.css" rel="stylesheet" >
+		
+		<script type="text/javascript" src="../../js/jquery/jquery-1.9.1.min.js"></script>
+		<script type="text/javascript" src="../../js/UICore.js"></script>
+		<script type="text/javascript" src="../../static/jquery/jquery.md5.js"></script>
+		<script type="text/javascript" src="../../js/dust-full-2.4.0.min.js"></script>
+		<script type="text/javascript" src="../../js/dust-helpers-1.2.0.min.js"></script>
+		<script type="text/javascript" src="../../js/duster.js"></script>
+		<script type="text/javascript" src="../../js/layer/layer.js"></script>
+		<script type="text/javascript" src="../../js/coverLayer.js"></script>
+		<script type="text/javascript" src="../../js/nanmingSite.js"></script>
+		<script type="text/javascript" src="../../js/jquery.ztree.core.js"></script>
+		<script type="text/javascript" src="manage_xingzhengquhua.js?version=1.0.0"></script>
+		<script type="text/javascript" src="../../static/talent_validate/js/validate/talent-validate-all-init.js"></script>
+		<script type="text/javascript" src="../../js/verify-session.js"></script>
+	</head>
+
+	<body style="height: 906px">
+		<div class="popBox" id="xingzhengPopBox">
+			<div class="popTit white">
+				<a href="javascript:void(0)" class="manageIco closeBt fr"
+					onclick="ccc(this)">close</a><span id="title">新增</span>
+			</div>
+			<div class="popFormCon">
+				<table width="400" border="0" cellpadding="0" cellspacing="0">
+					<tbody>
+						<tr>
+							<td width="150" class="tdTit">
+								<span class="tit">编码:</span>
+							</td>
+							<td width="250">
+								<input type="text" id="quHuaId" disabled="disabled" class="formInput5" value="">
+								<input type="hidden" id="areaId"><input type="hidden" id="infer">
+							</td>
+						</tr>
+						<tr>
+							<td class="tdTit">
+								<span class="tit">*行政区划名称:</span>
+							</td>
+							<td>
+								<input type="text" id="xingZhengQuHua" name="areaName" class="formInput5"  maxlength="15" placeholder="限制15个字以内">
+							</td>
+						</tr>
+						<tr>
+							<td class="tdTit">
+								<span class="tit">上一级:</span>
+							</td>
+							<td>
+					            <input type="text" id="parentName" name="parentName" class="formInput5" readonly="readonly">
+					            <input type="hidden" id="parentId" name="parentId" class="formInput5">
+					            </td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="popFooter tc">
+				<a href="javascript:void(0)" id="addXingZhengQuHua" class="tlButt buttColor white marLr40">保存</a>
+				<a href="javascript:void(0)" id="" class="tlButt buttColor2 white marLr40" onclick="ccc(this)">取消</a>
+			</div>
+		</div>
+		<!--xingzhengPopBox end-->
+
+
+		<div class="breadCrumb">
+			<span class="manageIco icoCurrent blue">当前位置</span><span
+				class="font14 blue">|</span><span class="manageIco icoArrR">系统配置
+			</span><span>行政区划管理</span>
+		</div>
+		<div class="hr20"></div>
+		<div class="treeMain">
+			<div class="xingzhengMainL">
+				<div class="xingzhengTit">
+					行政区划
+				</div>
+				<div class="treeCon">
+					<ul id="treeDemo" class="ztree"></ul>
+				</div>
+			</div>
+			<div class="xingzhengMainR">
+				<div class="xzTool">
+					<div class="fr tr">
+						<span class="disBlock">编码： </span><span class="disBlock marR40">
+							<input type="text" id="bianma" class="formInput5"> 
+							</span><a href="javascript:void(0)" class="tlButt buttColor white" id="queryBtn">查询</a>
+					</div>
+					<a href="javascript:void(0)" class="tlButt buttColor white"
+						onclick="newPop()">新增</a>
+				</div>
+				<div class="tableBox">
+					<input id="pageNo" name="pageNo" type="hidden" />
+					<input id="pageSize" name="pageSize" type="hidden" />
+					<input id="savepid" name="savepid" type="hidden"/>
+					<input id="hidetreeid" type="hidden">
+					<input id="hidetreename" type="hidden">
+					<input id="hidetreelevel" type="hidden">
+					<script type="text/x-template" id="dust_list">
+                   <thead>
+              <tr>
+                <th>编码</th>
+                <th>行政区划名称</th>
+                <th>上一级</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+				{#data}
+              <tr id="hideid{parentId}">
+                <td>{code}</td>
+                <td>{name}</td>
+                <td>{parentName}</td>
+				{@eq key=id value=1001}
+				{:else}
+                <td><span class="caozuoBt czBt1 white" val="{id}" name="modifyBtn">修改</span>
+					<span class="caozuoBt czBt3 white" val="{id}" name="delBtn">删除</span></td>
+             	{/eq}
+				 </tr>
+              <tr>
+			
+				{/data}
+				</tbody>
+				</script>
+					<table border="0" cellpadding="0" cellspacing="0"
+						class="table table-striped"  id="data_list">
+	
+					</table>
+					<div class="pageBar" id="page">
+						
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!--treeMain end-->
+		<div class="hr20"></div>
+
+		
+		
+	</body>
+</html>

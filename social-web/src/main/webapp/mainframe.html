@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="format-detection"content="telephone=yes">
+<title>智慧社区综合管理平台</title>
+<script type="text/javascript" src="js/jquery/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="js/UICore.js"></script>
+<script type="text/javascript" src="static/jquery/jquery.md5.js"></script>
+<script type="text/javascript" src="js/layer/layer.js"></script>
+<script type="text/javascript" src="js/mainframe.js?version=1.0.0"></script>
+<script type="text/javascript" src="static/talent_validate/js/validate/talent-validate-all-init.js"></script>
+<script type="text/javascript" src="js/verify-session.js"></script>
+<script type="text/javascript" src="js/nanmingSite.js"></script>
+<link href="css/nanmingStyle.css" rel="stylesheet" type="text/css">
+<link type="text/css" href="static/talent_validate/js/validate/css/validate.css" rel="stylesheet" >
+</head>
+
+<body>
+<div class="popBox" id="passPopBox">
+  <div class="popTit white"><a href="javascript:void(0)" class="manageIco closeBt fr" name="closeBtn" id="closeBtn" onclick="closePop(this)">close</a>修改密码</div>
+  <div class="popFormCon">
+    <table width="350" border="0" cellpadding="0" cellspacing="0">
+      <tbody>
+        <tr>
+          <td width="120" class="tdTit"><span class="tit">*旧密码：</span></td>
+          <td width="250"><input type="password" class="formInput5 warningInput" name="oldPassword" id="oldPassword">
+          
+        </tr>
+        <tr>
+          <td class="tdTit"><span class="tit">*新密码：</span></td>
+          <td><input type="password" class="formInput5 warningInput" name="newPassword" id="newPassword">
+            
+        </tr>
+        <tr>
+          <td class="tdTit"><span class="tit">*新密码确认：</span></td>
+          <td><input type="password" class="formInput5 warningInput" name="reNewPassword" id="reNewPassword">
+            
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="popFooter tc"><a href="javascript:void(0)" class="tlButt buttColor white marLr40" id="saveBtn"  onclick="save(this)">保存</a> <a href="javascript:void(0)" class="tlButt buttColor2 white marLr40" id="resetBtn" onclick="closePop(this)">取消</a> </div>
+</div>
+<div class="wrap">
+  <div class="header" id="header">
+    <div class="logo"><img src="images/logo.png" alt=""/></div>
+    <div class="userStatus white">
+      <p id="loginUser"></p>
+      <p><a href="javascript:void(0)" class="manageIco icoPass" onclick="newPop()">修改密码</a><a href="javascript:void(0)" class="manageIco icoSignout" onclick="exit()">退出</a></p>
+    </div>
+    <div class="navBar white">
+      <ul>
+        <li class="nav"><a id="shijian" href="javascript:void(0)" class="navTop navTop1">事件管理</a>
+        	<div class="sonNav" id="eventFun">
+       			
+			  
+			  
+			  
+			  
+			  </div>
+        </li>
+        <li class="nav"><a id="xitong" href="dataframe.html" class="navTop navTop2 navTopDq" onclick="" target="iframepage11">数据管理</a></li>
+      </ul>
+    </div>
+  </div>
+  <!--header end-->
+  <div class="mainB">
+  	<iframe src="bottomframe.html" id="iframepage11" name="iframepage11" frameBorder=0 scrolling=no width="100%";height="100%"; onLoad="reinitIframeEND11();"></iframe>
+  </div>
+</div>
+
+<script type="text/javascript" src="js/coverLayer.js"></script> 
+<script type="text/javascript" src="js/nanmingSite.js"></script>
+</body>
+</html>

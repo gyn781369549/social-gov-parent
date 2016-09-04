@@ -1,0 +1,135 @@
+#存在就删除
+#drop database if exists befriend; 
+#创建数据库
+#create database if not exists befriend DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+#存在就删除    
+
+#1
+               
+DROP TABLE IF EXISTS social_interaction_befriend;
+CREATE TABLE social_interaction_befriend(
+ `id` INT(11)  NOT NULL AUTO_INCREMENT,
+`user_id` INT(11)  NOT NULL  COMMENT '用户id',
+`area_id` INT(11)  NOT NULL  COMMENT '社区id',
+`checkk` INT(11)  default 0 COMMENT '审核是否通过0待审核&1审核通过 &2被驳回 默认0',
+`display_phone` INT(11)  default 0 COMMENT '是否显示联系方式 0不显示 1显示',
+
+`phone`  varchar(64) COMMENT '联系电话',
+`address`  varchar(64) COMMENT '联系地址',
+`link_time`  varchar(64) COMMENT '联系时间范围',
+`time`  date COMMENT '申请时间（年月日）',
+`content`  varchar(255) COMMENT '帮助内容简介',
+`is_charged`  INT(11)  default 0 COMMENT '是否收费 0免费&1收费 默认0',
+`charged`  varchar(64) COMMENT '收费说明',
+`pic`  varchar(255) COMMENT '图片地址',
+`feature`  INT(11)  default 0 COMMENT '组织特性0公益&1 默认0',
+`come`  INT(11)  default 0 COMMENT '  状态 0求助&1帮助 默认0',
+`code`   varchar(64)  default null COMMENT ' 组织机构代码默认0',
+`log`   varchar(64)  default null COMMENT '经度 ',
+`lat`   varchar(64)  default null COMMENT ' 纬度',
+
+
+ PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8  COMMENT '邻帮_帮助信息表';
+
+
+
+
+#2
+    
+
+#存在就删除数据库
+DROP TABLE IF EXISTS social_interaction_comment;
+CREATE TABLE social_interaction_comment(
+ `id` INT(11) NOT NULL AUTO_INCREMENT,
+`sib_id` INT(11) NOT NULL  COMMENT '邻帮_帮助信息表id',
+`user_id` INT(11) NOT NULL  COMMENT '用户id',
+`checkk` INT(11) default 0 COMMENT '审核是否通过0待审核&1审核通过 &2被驳回默认0',
+`time`  datetime COMMENT '申请时间（年月日时分秒）',
+`content`  varchar(255) COMMENT '评论内容',
+`star`  INT(11)  default 0 COMMENT '评级 满意度1-5星星 默认0',
+`source` INT(11)  default 0 COMMENT '0邻帮_帮助信息表1社区公示表2意见箱3',
+`is_reply` INT(11)  default 0 COMMENT '0未回复1已回复',
+`screen`  INT(11)  default 0 COMMENT '是否屏蔽   0未屏蔽&1屏蔽 默认0',
+`type`  INT(11)  default 0 COMMENT '问题种类',
+ PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8  COMMENT '帮助信息评论表';
+
+
+#3
+
+
+#存在就删除数据库
+DROP TABLE IF EXISTS social_interaction_parliament;
+CREATE TABLE social_interaction_parliament(
+ `id` INT(11) NOT NULL AUTO_INCREMENT,
+`area_id` INT(11) NOT NULL  COMMENT '社区id',
+`user_id` INT(11) NOT NULL  COMMENT '用户id',
+`time`  datetime COMMENT '创建时间',
+`content`  varchar(255) COMMENT '评论内容',
+ PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8  COMMENT '居民议事会表';
+
+
+
+#4
+
+
+#存在就删除数据库
+DROP TABLE IF EXISTS social_interaction_person;
+CREATE TABLE social_interaction_person(
+ `id` INT(11) NOT NULL AUTO_INCREMENT,
+`social_ interaction_parliament_id` INT(11) NOT NULL  COMMENT '居民议事会表id',
+`user_id` INT(11) NOT NULL  COMMENT '用户id',
+`time`  datetime COMMENT '创建时间',
+`content`  varchar(255) COMMENT '简要说明',
+ PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8  COMMENT '议员表';
+
+
+
+#5
+
+
+
+#存在就删除数据库
+DROP TABLE IF EXISTS social_interaction_good;
+CREATE TABLE social_interaction_good(
+ `id` INT(11) NOT NULL AUTO_INCREMENT,
+`social_ interaction_comment_id` INT(11) NOT NULL  COMMENT '评论id',
+`user_id` INT(11) NOT NULL  COMMENT '用户id',
+`time`  datetime COMMENT '创建时间',
+`good` INT(11) default 0  COMMENT '0没用1有用',
+`checkk` INT(11) default 0  COMMENT '区分来源',
+ PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8  COMMENT '6.统计有用没用表（social_ interaction_good）';
+
+
+
+
+
+
+#6
+
+
+#存在就删除数据库
+DROP TABLE IF EXISTS social_interaction_focus;
+CREATE TABLE social_interaction_focus(
+ `id` INT(11) NOT NULL AUTO_INCREMENT,
+`area_id` INT(11) NOT NULL  COMMENT '社区id',
+`user_id` INT(11) NOT NULL  COMMENT '用户id',
+`time`  datetime COMMENT '创建时间',
+`content` text COMMENT '正文',
+`title`  varchar(64) COMMENT '标题',
+`start_time`  date COMMENT '有效期起',
+`stop_time`  date COMMENT '有效期止',
+`pic`  varchar(255) COMMENT '图片地址',
+ PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8  COMMENT '社区公示表（social_ interaction_focus）';
+
+
+
+
+    
+    
+    

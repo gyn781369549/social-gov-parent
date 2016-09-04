@@ -1,0 +1,56 @@
+﻿
+
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="format-detection"content="telephone=yes">
+<title>APP下载</title>
+</head>
+<body>
+<div style="width:320px; margin:0px auto; padding:0px;">
+    <div style="clear:both; text-align:center; font-size:10px; color:#999;">若在微信中打开请使用浏览器打开</div>
+     
+    <div style="clear:both;"></div>
+    <div style="width:130px; height:130px; margin-left:10px; text-align:center; vertical-align:middle; float:left; border:3px dotted #FFFFFF;border-radius:50%;" id="iosDiv">
+    <div style="clear:both; height:13px;"></div>
+    <a href="https://o0f8tt1yu.qnssl.com/zsghs-2.plist"><img src="i.jpg" height="80" /></a>
+    <br />苹果下载
+    </div>
+    <div style=" width:130px; height:130px; margin-right:10px; text-align:center; vertical-align:middle; float:right; border:3px dotted #FFFFFF;border-radius:50%;" id="androidDiv">
+    <div style="clear:both; height:13px;"></div>
+    <a href="http://www.hnghw.com:8090/ZSGH.apk"><img src="a.jpg" height="80" /></a>
+    <br />安卓下载
+    </div>
+    <div style="clear:both;"></div>
+    <div style="margin:30px auto; text-align:center;  padding:0px;" id="tips">
+    ios9系统用户，请在app安装完成之后，进入通用-描述文件-Beijing CoAware-选择信任
+    <br /><br />
+    <img src="tips.gif" width="100%">
+    </div>
+</div>
+<script type="text/javascript">
+var u = navigator.userAgent, app = navigator.appVersion;
+var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //android终端或者uc浏览器
+var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端'
+if(isAndroid) {
+	location.href = 'http://www.hnghw.com:8090/ZSGH.apk';
+}
+var borderColorVal = '#cccccc';
+var borderColor = borderColorVal;
+var t = setInterval(function(){
+	if(!isiOS && !isAndroid) {
+		clearInterval(t);
+		return;
+	}
+	var id = isiOS?'iosDiv':'androidDiv';
+	var div = document.getElementById(id);
+	borderColor = borderColor==borderColorVal?'#ffffff':borderColorVal;
+	div.style.borderColor = borderColor;
+},500);
+</script>
+</body>
+</html>

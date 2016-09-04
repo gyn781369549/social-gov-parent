@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coaware.social.dao.interaction.SocialInteractionGoodDao">
+    
+	<sql id="socialInteractionGoodColumns">
+		a.id AS "id",
+		a.comment_id AS "commentId",
+		a.user_id AS "userId",
+		a.time AS "time",
+		a.good AS "good",
+		a.checkk AS "checkk"
+	</sql>
+	
+	<select id="get" resultType="SocialInteractionGood">
+		SELECT 
+			<include refid="socialInteractionGoodColumns"/>
+		FROM social_interaction_good a
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SocialInteractionGood">
+		SELECT 
+			<include refid="socialInteractionGoodColumns"/>
+		FROM social_interaction_good a
+		 
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SocialInteractionGood">
+		SELECT 
+			<include refid="socialInteractionGoodColumns"/>
+		FROM social_interaction_good a
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO social_interaction_good(
+			comment_id,
+			user_id,
+			time,
+			good,
+			checkk
+		) VALUES (
+			#{commentId},
+			#{userId},
+			#{time},
+			#{good},
+			#{checkk}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE social_interaction_good SET 	
+			comment_id = #{commentId},
+			user_id = #{userId},
+			time = #{time},
+			good = #{good},
+			checkk = #{checkk}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM social_interaction_good
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

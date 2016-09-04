@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coaware.social.dao.member.SocialMemberDao">
+    
+	<sql id="socialMemberColumns">
+		a.id AS "id",
+		a.user_name AS "userName",
+		a.full_name AS "fullName",
+		a.nick_name AS "nickName",
+		a.password AS "password",
+		a.sex AS "sex",
+		a.mobile AS "mobile",
+		a.verify AS "verify",
+		a.id_card AS "idCard",
+		a.id_card_front_path AS "idCardFrontPath",
+		a.id_card_back_path AS "idCardBackPath",
+		a.birthday AS "birthday",
+		a.rejection AS "rejection",
+		a.head_img AS "headImg",
+		a.status AS "status",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.device_token AS "deviceToken",
+		a.device_type AS "deviceType"
+	</sql>
+	
+	<select id="get" resultType="SocialMember">
+		SELECT 
+			<include refid="socialMemberColumns"/>
+		FROM social_member a
+		WHERE a.id = #{id}
+	</select>
+	
+	<!-- 根据用户名、手机号和密码登录，用户必须是启用的，启用放在java中判断-->
+	<select id="login" parameterType="java.util.Map" resultType="SocialMember">
+		select * from social_member where password = #{password} and (user_name = #{loginName} or mobile = #{loginName}) 
+	</select>
+	
+	<!-- 根据手机号查询用户，未禁用的-->
+	<select id="findByMobile" parameterType="String" resultType="SocialMember">
+		select * from social_member where mobile = #{mobile} 
+	</select>
+	
+	<!-- 根据手机号查询是否注册-->
+	<select id="isRegist" parameterType="String" resultType="Integer">
+		select count(id) from social_member where mobile = #{mobile} 
+	</select>
+	
+	
+	<select id="findList" resultType="SocialMember">
+		SELECT 
+			<include refid="socialMemberColumns"/>
+		FROM social_member a
+		 
+		<where>
+			<if test="verify !=null and verify !=''">
+				and a.verify = #{verify}
+			</if>
+			<if test="sex!=null and sex!=''">
+				and a.sex = #{sex}
+			</if>
+			<if test="userName!=null and userName!=''">
+				and a.user_name like  concat('%',#{userName},'%')
+			</if>
+			<if test="mobile!=null and mobile!=''">
+				and a.mobile = #{mobile} 
+			</if>
+			<if test="selverify !=null and selverify !=''">
+				and a.verify in 
+				<foreach item="item" index="index" collection="selverify" open="("
+					separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SocialMember">
+		SELECT 
+			<include refid="socialMemberColumns"/>
+		FROM social_member a
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO social_member(
+			user_name,
+			full_name,
+			nick_name,
+			password,
+			sex,
+			mobile,
+			verify,
+			id_card,
+			id_card_front_path,
+			id_card_back_path,
+			birthday,
+			rejection,
+			head_img,
+			status,
+			create_date,
+			update_date,
+			device_token,
+			device_type
+		) VALUES (
+			#{userName},
+			#{fullName},
+			#{nickName},
+			#{password},
+			#{sex},
+			#{mobile},
+			#{verify},
+			#{idCard},
+			#{idCardFrontPath},
+			#{idCardBackPath},
+			#{birthday},
+			#{rejection},
+			#{headImg},
+			#{status},
+			#{createDate},
+			#{updateDate},
+			#{deviceToken},
+			#{deviceType}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE social_member SET 
+			<if test="userName!=null and userName!=''">
+				user_name = #{userName},
+			</if>	
+			<if test=" fullName != null and fullName != '' ">
+				full_name = #{fullName},
+			</if>
+			<if test=" nickName != null and nickName != '' ">
+				nick_name = #{nickName},
+			</if>
+			<if test=" password != null and password != '' ">
+				password = #{password},
+			</if>
+			<if test=" sex != null and sex != '' ">
+				sex = #{sex},
+			</if>
+			<if test=" mobile != null and mobile != '' ">
+				mobile = #{mobile},
+			</if>
+			<if test=" verify != null and verify != '' ">
+				verify = #{verify},
+			</if>
+			<if test=" idCard != null and idCard != '' ">
+				id_card = #{idCard},
+			</if>
+			<if test=" idCardFrontPath != null and idCardFrontPath != '' ">
+				id_card_front_path = #{idCardFrontPath},
+			</if>
+			<if test=" idCardBackPath != null and idCardBackPath != '' ">
+				id_card_back_path = #{idCardBackPath},
+			</if>
+			<if test=" birthday != null and birthday != '' ">
+				birthday = #{birthday},
+			</if>
+			<if test=" rejection != null and rejection != '' ">
+				rejection = #{rejection},
+			</if>
+			<if test=" headImg != null and headImg != '' ">
+				head_img = #{headImg},
+			</if>
+			<if test=" status != null and status != '' ">
+				status = #{status},
+			</if>
+			<if test=" deviceToken != null and deviceToken != '' ">
+				device_token = #{deviceToken},
+			</if>
+			<if test=" deviceType != null and deviceType != '' ">
+				device_type = #{deviceType},
+			</if>
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateStatusById" parameterType="java.util.Map">
+		UPDATE social_member SET 	
+			status = #{status} 
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateVerifyById" parameterType="java.util.Map">
+		UPDATE social_member SET 	
+			verify = #{verify},
+			rejection = #{rejection}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

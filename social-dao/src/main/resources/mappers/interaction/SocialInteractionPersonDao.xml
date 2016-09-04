@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coaware.social.dao.interaction.SocialInteractionPersonDao">
+    
+	<sql id="socialInteractionPersonColumns">
+		a.id AS "id",
+		a.parliament_id AS "parliamentId",
+		
+		a.time AS "time",
+		a.content AS "content",
+		a.type AS "type",
+		a.name AS "name",
+		a.phone AS "phone",
+		a.pic AS "pic"
+	</sql>
+	
+	<select id="get" resultType="SocialInteractionPerson">
+		SELECT 
+			<include refid="socialInteractionPersonColumns"/>
+		FROM social_interaction_person a
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SocialInteractionPerson">
+		SELECT 
+			<include refid="socialInteractionPersonColumns"/>
+		FROM social_interaction_person a
+		 
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SocialInteractionPerson">
+		SELECT 
+			<include refid="socialInteractionPersonColumns"/>
+		FROM social_interaction_person a
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO social_interaction_person(
+			parliament_id,
+			
+			time,
+			content,
+			type,
+			name,
+			phone,
+			pic
+		) VALUES (
+			#{parliamentId},
+			
+			#{time},
+			#{content},
+			#{type},
+			#{name},
+			#{phone},
+			#{pic}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE social_interaction_person SET 	
+			parliament_id = #{parliamentId},
+		
+			content = #{content},
+			type =#{type},
+			name =#{name},
+			phone =#{phone},
+			pic =#{pic}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM social_interaction_person
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

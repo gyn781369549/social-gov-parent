@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coaware.social.dao.interaction.SocialInteractionBefriendDao">
+    
+	<sql id="socialInteractionBefriendColumns">
+		a.id AS "id",
+		a.user_id AS "userId",
+		a.checkk AS "checkk",
+		a.phone AS "phone",
+		a.address AS "address",
+		a.link_time AS "linkTime",
+		a.time AS "time",
+		a.content AS "content",
+		a.is_charged AS "isCharged",
+		a.pic AS "pic",
+		a.feature AS "feature",
+		a.come AS "come",
+		a.area_id AS "areaId" ,
+		a.display_phone AS "displayPhone" ,
+		a.code AS "code",
+		a.charged AS "charged",
+		a.log AS "log",
+		a.lat AS "lat"
+		
+		
+	</sql>
+	
+	<sql id="socialMemberColumns">
+		b.id AS "mUserId",
+		b.user_name AS "userName",
+		b.full_name AS "fullName",
+		b.nick_name AS "nickName",
+		b.password AS "password",
+		b.sex AS "sex",
+		b.mobile AS "mobile",
+		b.verify AS "verify",
+		b.id_card AS "idCard",
+		b.id_card_front_path AS "idCardFrontPath",
+		b.id_card_back_path AS "idCardBackPath",
+		b.birthday AS "birthday",
+		b.rejection AS "rejection",
+		b.head_img AS "headImg",
+		b.status AS "status",
+		b.create_date AS "createDate",
+		b.update_date AS "updateDate",
+		b.device_token AS "deviceToken",
+		b.device_type AS "deviceType"
+	</sql>
+	<select id="findVo" resultType="com.coaware.social.domain.vo.interaction.SocialInteractionBefriendVo">
+		SELECT 
+			<include refid="socialInteractionBefriendColumns"/>,
+			<!--  -->
+			b.user_name as userName,b.full_name as fullName,b.nick_name as nickName,b.id_card as idCard,
+			b.head_img as headImg
+		FROM social_interaction_befriend a,social_member b
+	<where>
+				a.user_id=b.id
+				
+				  
+				<if test="userName !=null " >
+					 AND b.user_name like CONCAT ('%',#{userName,jdbcType=VARCHAR},'%')
+			
+				</if>
+				<if test="id !=null " >
+					 AND a.id = #{id}
+				</if>
+				<if test="userId !=null " >
+					 AND a.user_id = #{userId}
+				</if>
+				<if test="areaId !=null " >
+					 AND a.area_id = #{areaId}
+				</if>
+				<if test="checkk !=null " >
+					 AND a.checkk = #{checkk}
+				</if>
+				<if test="displayPhone !=null " >
+					 AND a.display_phone = #{displayPhone}
+				</if>
+				<if test="phone !=null " >
+					 AND a.phone = #{phone}
+				</if>
+				
+				<if test="address !=null " >
+					 AND a.address = #{address}
+				</if>
+				
+				<if test="linkTime !=null " >
+					 AND a.link_time = #{linkTime}
+				</if>
+				
+				<if test="time !=null " >
+					 AND a.time = #{time}
+				</if>
+				<if test="content !=null " >
+					AND a.content like CONCAT ('%',#{content,jdbcType=VARCHAR},'%')
+				</if>
+				
+				<if test="isCharged !=null " >
+					 AND a.is_charged = #{isCharged}
+				</if>
+				<if test="pic !=null " >
+					 AND a.pic = #{pic}
+				</if>
+				<if test="feature !=null " >
+					 AND a.feature = #{feature}
+				</if>
+				<if test="come !=null " >
+					 AND a.come = #{come}
+				</if>
+				
+			</where>	
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	
+	
+	
+	<select id="get" resultType="SocialInteractionBefriend">
+		SELECT 
+			<include refid="socialInteractionBefriendColumns"/>
+		FROM social_interaction_befriend a
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SocialInteractionBefriend">
+		SELECT 
+			<include refid="socialInteractionBefriendColumns"/>
+		FROM social_interaction_befriend a
+		 
+		<where>
+			1=1
+				<if test="id !=null " >
+					 AND id = #{id}
+				</if>
+				<if test="userId !=null " >
+					 AND user_id = #{userId}
+				</if>
+				<if test="areaId !=null " >
+					 AND area_id = #{areaId}
+				</if>
+				<if test="checkk !=null " >
+					 AND checkk = #{checkk}
+				</if>
+				<if test="displayPhone !=null " >
+					 AND display_phone = #{displayPhone}
+				</if>
+				<if test="phone !=null " >
+					 AND phone = #{phone}
+				</if>
+				
+				<if test="address !=null " >
+					 AND address = #{address}
+				</if>
+				
+				<if test="linkTime !=null " >
+					 AND link_time = #{linkTime}
+				</if>
+				
+				<if test="time !=null " >
+					 AND time = #{time}
+				</if>
+				<if test="content !=null " >
+					 AND content = #{content}
+				</if>
+				
+				<if test="isCharged !=null " >
+					 AND is_charged = #{isCharged}
+				</if>
+				<if test="pic !=null " >
+					 AND pic = #{pic}
+				</if>
+				<if test="feature !=null " >
+					 AND feature = #{feature}
+				</if>
+				<if test="come !=null " >
+					 AND come = #{come}
+				</if>
+				<if test="code !=null " >
+					 AND code = #{code}
+				</if>
+				
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SocialInteractionBefriend">
+		SELECT 
+			<include refid="socialInteractionBefriendColumns"/>
+		FROM social_interaction_befriend a
+	<where>
+				1=1
+				<if test="id !=null " >
+					 AND id = #{id}
+				</if>
+				<if test="userId !=null " >
+					 AND user_id = #{userId}
+				</if>
+				<if test="areaId !=null " >
+					 AND area_id = #{areaId}
+				</if>
+				<if test="checkk !=null " >
+					 AND checkk = #{checkk}
+				</if>
+				<if test="displayPhone !=null " >
+					 AND display_phone = #{displayPhone}
+				</if>
+				<if test="phone !=null " >
+					 AND phone = #{phone}
+				</if>
+				
+				<if test="address !=null " >
+					 AND address = #{address}
+				</if>
+				
+				<if test="linkTime !=null " >
+					 AND link_time = #{linkTime}
+				</if>
+				
+				<if test="time !=null " >
+					 AND time = #{time}
+				</if>
+				<if test="content !=null " >
+					AND content like CONCAT ('%',#{content,jdbcType=VARCHAR},'%')
+				</if>
+				
+				<if test="isCharged !=null " >
+					 AND is_charged = #{isCharged}
+				</if>
+				<if test="pic !=null " >
+					 AND pic = #{pic}
+				</if>
+				<if test="feature !=null " >
+					 AND feature = #{feature}
+				</if>
+				<if test="come !=null " >
+					 AND come = #{come}
+				</if>
+			</where>	
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO social_interaction_befriend(
+			user_id,
+			checkk,
+			phone,
+			address,
+			link_time,
+			time,
+			content,
+			is_charged,
+			pic,
+			feature,
+			come,
+			area_id,
+			display_phone,
+			code,
+			charged,
+			log,
+			lat
+		) VALUES (
+			#{userId},
+			#{checkk},
+			#{phone},
+			#{address},
+			#{linkTime},
+			#{time},
+			#{content},
+			#{isCharged},
+			#{pic},
+			#{feature},
+			#{come},
+			#{areaId},
+			#{displayPhone},
+			#{code},
+			#{charged},
+			#{log},
+			#{lat}
+			
+			
+			
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE social_interaction_befriend SET 	
+			
+			<if test="checkk !=null " >
+					  checkk = #{checkk}
+				</if>
+				<if test="displayPhone !=null " >
+					  display_phone = #{displayPhone}
+				</if>
+				<if test="phone !=null " >
+					  phone = #{phone}
+				</if>
+				
+				<if test="address !=null " >
+					  address = #{address}
+				</if>
+				
+				<if test="linkTime !=null " >
+					  link_time = #{linkTime}
+				</if>
+				
+				<if test="time !=null " >
+					  time = #{time}
+				</if>
+				<if test="content !=null " >
+					  content = #{content}
+				</if>
+				
+				<if test="isCharged!=null" >
+					  is_charged = #{isCharged}
+				</if>
+				<if test="pic !=null " >
+					  pic = #{pic}
+				</if>
+				<if test="feature !=null " >
+					  feature = #{feature}
+				</if>
+				<if test="come !=null " >
+					  come = #{come}
+				</if>
+				<if test="code !=null " >
+					  code = #{code}
+				</if>
+				<if test="charged !=null " >
+					  charged = #{charged}
+				</if>
+				<if test="log !=null " >
+					  log = #{log}
+				</if>
+				<if test="lat !=null " >
+					  lat = #{lat}
+				</if>
+			
+			
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM social_interaction_befriend
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

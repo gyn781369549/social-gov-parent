@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coaware.social.dao.member.SocialMemberAreaDao">
+	<sql id="socialMemberAreaColumns">
+		a.id AS "id",
+		a.member_id AS "memberId",
+		a.area_id AS "areaId",
+		a.create_date AS "createDate"
+	</sql>
+	
+	<select id="get" resultType="SocialMemberArea">
+		SELECT 
+			<include refid="socialMemberAreaColumns"/>  
+		FROM social_member_area a 
+		WHERE a.id = #{id}
+	</select>
+	
+	 
+	
+	<select id="findList" resultType="SocialMemberArea">
+		SELECT 
+			<include refid="socialMemberAreaColumns"/>
+		FROM social_member_area a
+		 
+		<where>
+			 
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.id asc
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findByMemberId" resultType="com.coaware.social.domain.vo.member.SocialMemberAreaVo" parameterType="Integer">
+		SELECT 
+			<include refid="socialMemberAreaColumns"/>, ar.name as name
+		FROM social_member_area a
+		left join social_area ar on ar.id = a.area_id
+		<where>
+			a.member_id = #{memberId} 
+		</where>
+		order by a.area_id asc
+	</select>
+	
+	<select id="findAllList" resultType="SocialMemberArea">
+		SELECT 
+			<include refid="socialMemberAreaColumns"/>
+		FROM social_member_area a
+		order by a.id asc
+	</select>
+	
+	<insert id="insert"  useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO social_member_area(
+			member_id,
+			area_id,
+			create_date
+		) VALUES (
+			#{memberId},
+			#{areaId},
+			#{createDate}
+		)
+	</insert>
+	
+	 
+	<update id="deleteByMemberIdAndAreaId" parameterType="java.util.Map">
+		DELETE FROM social_member_area 
+		where member_id=#{memberId} 
+		<if test=" areaId != null and areaId !='' ">
+			and area_id = #{areaId}
+		</if>
+	</update>
+	
+	<select id="findAllArea" resultType="com.coaware.social.domain.member.SocialMemberAreaNode">
+		SELECT 
+			a.id as "id", a.name as "name", a.parent_id as "pid",a.level as "state" 
+		FROM social_area a
+		
+		
+		
+	</select>
+	 
+</mapper>

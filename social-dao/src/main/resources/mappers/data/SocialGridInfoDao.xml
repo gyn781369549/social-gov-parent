@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coaware.social.dao.data.SocialGridInfoDao">
+    
+	<sql id="socialGridInfoColumns">
+		a.id AS "id",
+		a.area_id AS "areaId",
+		a.grid_num AS "gridNum",
+		a.grid_name AS "gridName",
+		a.grid_type AS "gridType",
+		a.grid_area AS "gridArea",
+		a.grid_households AS "gridHouseholds",
+		a.grid_address AS "gridAddress",
+		a.grid_describe AS "gridDescribe",
+		a.create_by AS "createBy",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy",
+		a.update_date AS "updateDate"
+	</sql>
+	
+	<select id="get" resultType="SocialGridInfo">
+		SELECT 
+			<include refid="socialGridInfoColumns"/>
+		FROM social_grid_info a
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="com.coaware.social.domain.vo.data.SocialGridInfoVo" parameterType="com.coaware.social.domain.vo.data.SocialGridInfoVo">
+		SELECT 
+			<include refid="socialGridInfoColumns"/>, ar.name as committeeName, ar1.name as communityName
+		FROM social_grid_info a
+		left join social_area ar on ar.id = a.area_id
+		left join social_area ar1 on ar1.id = ar.parent_id 
+		<where>
+			<if test="conditions != null and conditions !=''">
+				${conditions}
+			</if>
+			<if test="areaId!='' and areaId!=null">
+			   and a.area_id=#{areaId}
+			</if>
+			<if test=" keyWord != null and keyWord !='' ">
+				AND ( a.grid_num = #{keyWord} or a.grid_name like  concat('%',#{keyWord},'%'))
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SocialGridInfo">
+		SELECT 
+			<include refid="socialGridInfoColumns"/>
+		FROM social_grid_info a
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert"  useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO social_grid_info(
+			area_id,
+			grid_num,
+			grid_name,
+			grid_type,
+			grid_area,
+			grid_households,
+			grid_address,
+			grid_describe,
+			create_by,
+			create_date,
+			update_by,
+			update_date
+		) VALUES (
+			#{areaId},
+			#{gridNum},
+			#{gridName},
+			#{gridType},
+			#{gridArea},
+			#{gridHouseholds},
+			#{gridAddress},
+			#{gridDescribe},
+			#{createBy},
+			#{createDate},
+			#{updateBy},
+			#{updateDate}
+		)
+	</insert>
+	
+	<!-- 批量插入（导入Excel表） -->
+	<insert id="insertBatch" parameterType="java.util.List">
+		INSERT INTO social_grid_info(
+			area_id,
+			grid_num,
+			grid_name,
+			grid_type,
+			grid_area,
+			grid_households,
+			grid_address,
+			grid_describe,
+			create_by,
+			create_date,
+			update_by,
+			update_date
+		) VALUES 
+		<foreach collection="list" item="item" index="index"
+		   separator=",">
+		   (
+		    #{item.areaId},
+			#{item.gridNum},
+			#{item.gridName},
+			#{item.gridType},
+			#{item.gridArea},
+			#{item.gridHouseholds},
+			#{item.gridAddress},
+			#{item.gridDescribe},
+			#{item.createBy},
+			#{item.createDate},
+			#{item.updateBy},
+			#{item.updateDate}
+		   )
+		</foreach>
+	</insert>
+	
+	<update id="update">
+		UPDATE social_grid_info SET 
+		    grid_describe = #{gridDescribe},
+		    grid_area = #{gridArea},
+			grid_address = #{gridAddress},	
+			grid_households = #{gridHouseholds},
+			<if test=" areaId != null and areaId != '' ">
+			area_id = #{areaId},
+			</if>
+			<if test=" gridNum != null and gridNum != '' ">
+			grid_num = #{gridNum},
+			</if>
+			<if test=" gridName != null and gridName != '' ">
+			grid_name = #{gridName},
+			</if>
+			<if test=" gridType != null and gridType != '' ">
+			grid_type = #{gridType},
+			</if>															
+			<if test=" updateBy != null and updateBy != '' ">
+			update_by = #{updateBy},
+			</if>
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+	
+	<!--批量删除-->
+	<delete id = "delete" parameterType = "java.lang.String">  
+    	<![CDATA[  
+       		DELETE FROM social_grid_info WHERE id IN  
+    	]]>  
+    	<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+    		#{item}  
+   	 	</foreach>  
+	</delete>
+	
+	<select id="findAreaIds" resultType="com.coaware.social.domain.vo.data.SocialGridInfoVo" parameterType="com.coaware.social.domain.vo.data.SocialGridInfoVo">
+		SELECT 
+			<include refid="socialGridInfoColumns"/>, ar.name as committeeName, ar1.name as communityName
+		FROM social_grid_info a
+		left join social_area ar on ar.id = a.area_id
+		left join social_area ar1 on ar1.id = ar.parent_id 
+		<where>
+			and a.area_id in
+			<foreach item="item" index="index" collection="list" open="("
+				separator="," close=")">
+				#{item}
+			</foreach>
+			
+		</where>		
+	</select>
+<!-- 根据行政区划id和网格名称查询同一社区下网格名称的数量来判断是否重复 -->
+    <select id="selectCount" resultType="java.lang.Integer">
+        select count(*) from social_grid_info a
+        where 1=1
+        and a.area_id = #{areaId} and a.grid_name = #{gridName}
+        <if test=" id != null and id != ''">
+			AND a.id != #{id}
+		</if>
+    </select>
+	
+	<select id="findById" resultType="com.coaware.social.domain.vo.data.SocialGridInfoVo">
+		SELECT 
+			<include refid="socialGridInfoColumns"/>, ar.name as committeeName, ar1.name as communityName
+		FROM social_grid_info a
+		left join social_area ar on ar.id = a.area_id
+		left join social_area ar1 on ar1.id = ar.parent_id 
+		WHERE a.id = #{id}
+	</select>
+	
+	<!-- 查询该该居委会所在社区下所有网格中最大的网格号 -->
+	<select id="findMaxGridNum" resultType="com.coaware.social.domain.vo.data.SocialGridInfoVo">
+		select MAX(SUBSTR(grid_num,-2)) as maxGridNum from social_grid_info g
+        where g.area_id in(
+        select sa.id from social_area sa where sa.parent_id = 
+        (select a.parent_id from social_area a where a.id = #{areaId}))
+	</select>
+	
+	
+</mapper>

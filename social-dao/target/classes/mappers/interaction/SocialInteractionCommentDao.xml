@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coaware.social.dao.interaction.SocialInteractionCommentDao">
+    
+	<sql id="socialInteractionCommentColumns">
+		a.id AS "id",
+		
+		a.user_id AS "userId",
+		a.sib_id AS "sibId",
+		a.checkk AS "checkk",
+		a.time AS "time",
+		a.content AS "content",
+		a.star AS "star",
+		a.source AS "source",
+		a.is_reply AS "isReply",
+		a.screen AS "screen",
+		a.type AS "type"
+	</sql>
+	<sql id="socialMemberColumns">
+		b.id AS "m_User_Id",
+		b.user_name AS "userName",
+		b.full_name AS "fullName",
+		b.nick_name AS "nickName",
+		b.password AS "password",
+		b.sex AS "sex",
+		b.mobile AS "mobile",
+		b.verify AS "verify",
+		b.id_card AS "idCard",
+		b.id_card_front_path AS "idCardFrontPath",
+		b.id_card_back_path AS "idCardBackPath",
+		b.birthday AS "birthday",
+		b.rejection AS "rejection",
+		b.head_img AS "headImg",
+		b.status AS "status",
+		b.create_date AS "createDate",
+		b.update_date AS "updateDate",
+		b.device_token AS "deviceToken",
+		b.device_type AS "deviceType"
+	</sql>
+	
+	<select id="get" resultType="SocialInteractionComment">
+		SELECT 
+			<include refid="socialInteractionCommentColumns"/>
+		FROM social_interaction_comment a
+		WHERE a.id = #{id}
+	</select>
+	<select id="findVo" resultType="com.coaware.social.domain.vo.interaction.SocialInteractionCommentVo">
+		SELECT 
+			<include refid="socialInteractionCommentColumns"/>,
+			<!--  -->
+			b.user_name as userName,b.full_name as fullName,b.nick_name as nickName,b.id_card as idCard,
+			b.head_img as headImg
+		FROM social_interaction_comment a,social_member b
+	<where>
+				a.user_id=b.id
+				<if test="id !=null " >
+					 AND id = #{id}
+				</if>
+				<if test="sibId !=null " >
+					 AND sib_id = #{sibId}
+				</if>
+				<if test="userId !=null " >
+					 AND user_id = #{userId}
+				</if>
+				<if test="checkk !=null " >
+					 AND checkk = #{checkk}
+				</if>
+				<if test="time !=null " >
+					 AND time = #{time}
+				</if>
+				<if test="content !=null " >
+					AND content like CONCAT ('%',#{content,jdbcType=VARCHAR},'%')
+				</if>
+				
+				<if test="star !=null " >
+					 AND star = #{star}
+				</if>
+				<if test="source !=null " >
+					 AND source = #{source}
+				</if>
+				<if test="isReply !=null " >
+					 AND is_reply = #{isReply}
+				</if>
+				<if test="screen !=null " >
+					 AND screen = #{screen}
+				</if>
+				<if test="type !=null " >
+					 AND type = #{type}
+				</if>
+				
+			</where>	
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	<select id="findList" resultType="SocialInteractionComment">
+		SELECT 
+			<include refid="socialInteractionCommentColumns"/>
+		FROM social_interaction_comment a
+		 
+		<where>
+				1=1
+				<if test="id !=null " >
+					 AND id = #{id}
+				</if>
+				<if test="sibId !=null " >
+					 AND sib_id = #{sibId}
+				</if>
+				<if test="userId !=null " >
+					 AND user_id = #{userId}
+				</if>
+				<if test="checkk !=null " >
+					 AND checkk = #{checkk}
+				</if>
+				<if test="time !=null " >
+					 AND time = #{time}
+				</if>
+				<if test="content !=null " >
+					AND content like CONCAT ('%',#{content,jdbcType=VARCHAR},'%')
+				</if>
+				
+				<if test="star !=null " >
+					 AND star = #{star}
+				</if>
+				<if test="source !=null " >
+					 AND source = #{source}
+				</if>
+				<if test="isReply !=null " >
+					 AND is_reply = #{isReply}
+				</if>
+				<if test="screen !=null " >
+					 AND screen = #{screen}
+				</if>
+				<if test="type !=null " >
+					 AND type = #{type}
+				</if>
+	
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SocialInteractionComment">
+		SELECT 
+			<include refid="socialInteractionCommentColumns"/>
+		FROM social_interaction_comment a
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO social_interaction_comment(
+			sib_id,
+			user_id,
+			checkk,
+			time,
+			content,
+			star,
+			source,
+			is_reply,
+			screen
+		) VALUES (
+			#{sibId},
+			#{userId},
+			#{checkk},
+			#{time},
+			#{content},
+			#{star},
+			#{source},
+			#{isReply},
+			#{screen}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE social_interaction_comment  	
+		<!--  
+			sib_id = #{sibId},
+			user_id = #{userId},
+			-->
+			<set>
+				<if test="checkk != null" >
+					checkk = #{checkk,jdbcType=INT},
+				</if>
+				<if test="time != null" >
+					time = #{time},
+				</if>
+				<if test="content != null" >
+					content = #{content,jdbcType=VARCHAR},
+				</if>
+				<if test="star != null" >
+					star = #{star,jdbcType=INT},
+				</if>
+				<if test="source != null" >
+					source = #{source,jdbcType=INT},
+				</if>
+				<if test="isReply != null" >
+					is_reply = #{isReply,jdbcType=INT},
+				</if>
+				<if test="screen != null" >
+					screen = #{screen,jdbcType=INT},
+				</if>
+				<if test="type != null" >
+					type = #{type,jdbcType=INT}
+				</if>
+			</set>
+			
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM social_interaction_comment
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

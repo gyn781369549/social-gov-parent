@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coaware.social.dao.sys.SocialSysUserDao">
+    
+	<sql id="socialSysUserColumns">
+		a.id AS "id",
+		a.login_name AS "loginName",
+		a.user_name AS "userName",
+		a.mobile AS "mobile",
+		a.password AS "password",
+		a.sex AS "sex",
+		a.qq AS "qq",
+		a.tel AS "tel",
+		a.email AS "email",
+		a.role_id AS "roleId",
+		a.community_id AS "communityId",
+		a.net_id AS "netId",
+		a.dept_id AS "deptId",
+		a.del_flag AS "delFlag",
+		a.create_by AS "createBy",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy",
+		a.update_date AS "updateDate",
+		a.position AS "position",
+		a.user_type AS "userType" 
+	</sql>
+	
+	<select id="get" resultType="SocialSysUser">
+		SELECT 
+			<include refid="socialSysUserColumns"/>,b.name as "net2name",c.name as "net1name",d.grid_name as "netName"
+		FROM social_sys_user a 
+		left join social_area b on a.community_id=b.id 
+		left join social_area c on b.parent_id=c.id 
+		left join social_grid_info d on a.net_id=d.id 
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SocialSysUser">  
+		SELECT 
+			<include refid="socialSysUserColumns"/>, c.name AS "deptname", d.grid_name AS "netname"  
+			FROM social_sys_user a		
+		 	
+			left join social_dept c on a.dept_id=c.id
+			left join social_grid_info d on a.net_id=d.id 
+			left join social_role_user e on e.user_id=a.id 
+			
+			
+		<where>
+			a.mobile!=''
+			<if test="loginName != null and loginName != ''">
+				AND a.login_name LIKE 
+					concat('%',#{loginName},'%')
+			</if>
+			<if test="userName != null and userName != ''">
+				AND a.user_name  LIKE 
+					concat('%',#{userName},'%')
+			</if>
+			<if test="roleId != null and roleId !=''">
+				AND e.role_id = #{roleId}
+			</if>
+			<if test="sex != null and sex !=''">
+				AND a.sex = #{sex}
+			</if>
+			<if test="netId != null and netId !=''">
+				AND a.net_id = #{netId}
+			</if>
+		</where>
+		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY 
+				<if test="order==0 or order=='' or order==null">
+					a.create_date DESC
+				</if>
+				<if test="order==1">
+					e.role_id
+				</if>
+				<if test="order==2">
+					e.role_id DESC
+				</if>
+				<if test="order==3">
+					a.net_id 
+				</if>
+				<if test="order==4">
+					a.net_id desc 
+				</if>
+			</otherwise>
+			
+		</choose>
+		
+	</select>
+	
+	<select id="findAllList" resultType="SocialSysUser">
+		SELECT 
+			<include refid="socialSysUserColumns"/>
+		FROM social_sys_user a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="queryGridMemberByName" resultType="SocialSysUser" parameterType="String">
+		select id, name from social_sys_user where user_name like concat('%',#{keyword},'%') order by user_name asc 
+	</select>
+	
+	<insert id="insert"  useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO social_sys_user(
+			login_name,
+			user_name,
+			mobile,
+			password,
+			sex,
+			qq,
+			tel,
+			email,
+			role_id,
+			community_id,
+			net_id,
+			dept_id,
+			del_flag,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			position,
+			user_type 
+		) VALUES (
+			#{loginName},
+			#{userName},
+			#{mobile},
+			#{password},
+			#{sex},
+			#{qq},
+			#{tel},
+			#{email},
+			#{roleId},
+			#{communityId},
+			#{netId},
+			#{deptId},
+			#{delFlag},
+			#{createBy},
+			#{createDate},
+			#{updateBy},
+			#{updateDate},
+			#{position},
+			#{userType}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE social_sys_user SET 	
+			login_name = #{loginName},
+			user_name = #{userName},
+			mobile = #{mobile},
+			password = #{password},
+			sex = #{sex},
+			qq = #{qq},
+			tel = #{tel},
+			email = #{email},
+			role_id = #{roleId},
+			community_id = #{communityId},
+			net_id = #{netId},
+			dept_id = #{deptId},
+			update_by = #{updateBy},
+			update_date = #{updateDate},
+			position = #{position}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM social_sys_user 
+		<where>
+			<if test="loginName==null or loginName==''">
+				id = #{id}
+			</if>
+			<if test="loginName!=null and loginName!=''">
+				login_name = #{loginName}
+			</if>
+		</where>
+		
+	</update>
+	
+	<select id="findByAccountAndPassword" resultType="SocialSysUser">
+		SELECT 
+			<include refid="socialSysUserColumns"/>
+		FROM social_sys_user a		 
+		WHERE a.login_name = #{loginName}
+		<if test="password!=null and password!=''">
+			and password = #{password}
+		</if>  
+	</select>
+	
+	<update id="enble">
+		UPDATE social_sys_user SET 
+			del_flag = #{delFlag}
+		WHERE id = #{id}
+	</update>
+	
+	<select id="autoLoginNameAndPassword" resultType="SocialSysUser">
+		SELECT 
+			<include refid="socialSysUserColumns"/>
+		FROM social_sys_user a		 
+		order by id desc LIMIT 1
+	</select>
+	
+	<select id="findNetIds" resultType="SocialSysUser">  
+		SELECT 
+			<include refid="socialSysUserColumns"/>, c.name AS "deptname", d.grid_name AS "netname"  
+			FROM social_sys_user a		
+		 	
+			left join social_dept c on a.dept_id=c.id
+			left join social_grid_info d on a.net_id=d.id 
+			left join social_role_user e on e.user_id=a.id 
+			
+			
+		<where>
+			a.mobile!='' and a.del_flag=0
+			and a.net_id in
+			<foreach item="item" index="index" collection="list" open="("
+				separator="," close=")">
+				#{item}
+			</foreach>
+		</where>
+	</select>
+</mapper>

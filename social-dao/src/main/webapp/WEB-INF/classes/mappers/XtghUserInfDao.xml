@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coaware.social.dao.sys.XtghUserInfDao">
+    
+	<sql id="xtghUserInfColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.account AS "account",
+		a.mobile AS "mobile",
+		a.password AS "password",
+		a.code AS "code",
+		a.validate_time AS "validateTime",
+		a.header_img AS "headerImg",
+		a.email AS "email",
+		a.sex AS "sex",
+		a.age AS "age",
+		a.zzmm AS "zzmm",
+		a.unit AS "unit",
+		a.skill AS "skill",
+		a.nation AS "nation",
+		a.org AS "org",
+		a.org_name AS "orgName",
+		a.edu AS "edu",
+		a.marriage_status AS "marriageStatus",
+		a.province AS "province",
+		a.current_address AS "currentAddress",
+		a.id_card AS "idCard",
+		a.id_card_img AS "idCardImg",
+		a.check_status AS "checkStatus",
+		a.verify_status AS "verifyStatus",
+		a.work_unit AS "workUnit",
+		a.create_by AS "createBy",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy",
+		a.update_date AS "updateDate"
+	</sql>
+	
+	<sql id="xtghUserInfJoins">
+	</sql>
+    
+	<select id="get" resultType="XtghUserInf">
+		SELECT 
+			<include refid="xtghUserInfColumns"/>
+		FROM xtgh_user_inf a
+		<include refid="xtghUserInfJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	
+	<select id="query" resultType="XtghUserInf">
+		SELECT 
+			<include refid="xtghUserInfColumns"/>
+		FROM xtgh_user_inf a
+		<include refid="xtghUserInfJoins"/>
+		WHERE 1=1 
+		<if test="id != null and id != ''">
+			AND a.id = #{id}
+		</if>
+		<if test="mobile != null and mobile != ''">
+			AND a.mobile = #{mobile}
+		</if>
+		<if test="code != null and code != ''">
+			AND a.code = #{code}
+		</if>
+		<if test="name != null and name != ''">
+			AND a.name LIKE 
+				concat('%',#{name},'%')
+		</if>
+		<if test="account != null and account != ''">
+			AND a.account = #{account}
+		</if>
+		<if test="password != null and password != ''">
+			AND a.password = #{password}
+		</if>
+		<if test="zzmm != null and zzmm != ''">
+			AND a.zzmm = #{zzmm}
+		</if>
+		<if test="org != null and org != ''">
+			AND a.org LIKE 
+				concat('%',#{org},'%')
+		</if>
+		<if test="edu != null and edu != ''">
+			AND a.edu = #{edu}
+		</if>
+		<if test="mobile != null and mobile != ''">
+			AND a.mobile = #{mobile}
+		</if>
+	</select>
+	
+	<select id="findList" resultType="XtghUserInf">
+		SELECT 
+			<include refid="xtghUserInfColumns"/>
+		FROM xtgh_user_inf a
+		<include refid="xtghUserInfJoins"/>
+		<where>
+			
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					concat('%',#{name},'%')
+			</if>
+			<if test="account != null and account != ''">
+				AND a.account = #{account}
+			</if>
+			<if test="zzmm != null and zzmm != ''">
+				AND a.zzmm = #{zzmm}
+			</if>
+			<if test="org != null and org != ''">
+				AND a.org LIKE 
+					concat('%',#{org},'%')
+			</if>
+			<if test="edu != null and edu != ''">
+				AND a.edu = #{edu}
+			</if>
+			<if test="mobile != null and mobile != ''">
+				AND a.mobile = #{mobile}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="XtghUserInf">
+		SELECT 
+			<include refid="xtghUserInfColumns"/>
+		FROM xtgh_user_inf a
+		<include refid="xtghUserInfJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO xtgh_user_inf(
+			 
+			name,
+			account,
+			mobile,
+			password,
+			code,
+			validate_time,
+			header_img,
+			email,
+			sex,
+			age,
+			zzmm,
+			unit,
+			skill,
+			nation,
+			org,
+			org_name,
+			edu,
+			marriage_status,
+			province,
+			current_address,
+			id_card,
+			id_card_img,
+			check_status,
+			verify_status,
+			work_unit,
+			create_by,
+			create_date,
+			update_by,
+			update_date
+		) VALUES (
+			 
+			#{name},
+			#{account},
+			#{mobile},
+			#{password},
+			#{code},
+			#{validateTime},
+			#{headerImg},
+			#{email},
+			#{sex},
+			#{age},
+			#{zzmm},
+			#{unit},
+			#{skill},
+			#{nation},
+			#{org},
+			#{orgName},
+			#{edu},
+			#{marriageStatus},
+			#{province},
+			#{currentAddress},
+			#{idCard},
+			#{idCardImg},
+			#{checkStatus},
+			#{verifyStatus},
+			#{workUnit},
+			#{createBy},
+			#{createDate},
+			#{updateBy},
+			#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE xtgh_user_inf SET 
+			<if test="name != null and name != ''">
+			name = #{name},
+			</if>	
+			<if test="account !=null and account != ''">
+			account = #{account},
+			</if>
+			<if test="mobile !=null and mobile != ''">
+			mobile = #{mobile},
+			</if>
+			<if test="password !=null and password != ''">
+			password = #{password},
+			</if>
+			<if test="code !=null and code != ''">
+			code = #{code},
+			</if>
+			<if test="validateTime !=null and validateTime != ''">
+			validate_time = #{validateTime},
+			</if>
+			<if test="headerImg !=null and headerImg != ''">
+			header_img = #{headerImg},
+			</if>
+			<if test="email !=null and email != ''">
+			email = #{email},
+			</if>
+			<if test="sex !=null and sex != ''">
+			sex = #{sex},
+			</if>
+			<if test="age !=null and age != ''">
+			age = #{age},
+			</if>
+			<if test="zzmm !=null and zzmm != ''">
+			zzmm = #{zzmm},
+			</if>
+			<if test="unit !=null and unit != ''">
+			unit = #{unit},
+			</if>
+			<if test="skill !=null and skill != ''">
+			skill = #{skill},
+			</if>
+			<if test="nation !=null and nation != ''">
+			nation = #{nation},
+			</if>
+			<if test="org !=null and org != ''">
+			org = #{org},
+			</if>
+			<if test="orgName !=null and orgName != ''">
+			org_name = #{orgName},
+			</if>
+			<if test="edu !=null and edu != ''">
+			edu = #{edu},
+			</if>
+			<if test="marriageStatus !=null and marriageStatus != ''">
+			marriage_status = #{marriageStatus},
+			</if>
+			<if test="province !=null and province != ''">
+			province = #{province},
+			</if>
+			<if test="currentAddress !=null and currentAddress != ''">
+			current_address = #{currentAddress},
+			</if>
+			<if test="idCard !=null and idCard != ''">
+				id_card = #{idCard},
+			</if>
+			<if test="idCardImg !=null and idCardImg != ''">
+				id_card_img = #{idCardImg},
+			</if>
+			<if test="checkStatus !=null and checkStatus != ''">
+				check_status = #{checkStatus},
+			</if>
+			<if test="verifyStatus !=null and verifyStatus != ''">
+				verify_status = #{verifyStatus},
+			</if>
+			<if test="workUnit !=null and workUnit != ''">
+				work_unit = #{workUnit},
+			</if>
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM xtgh_user_inf
+		WHERE id = #{id}
+	</update>
+	
+	<!-- 登录验证 -->
+	<select id="findUser" resultType="XtghUserInf">
+		SELECT 
+			<include refid="xtghUserInfColumns"/>
+		FROM xtgh_user_inf a
+		<include refid="xtghUserInfJoins"/>
+		WHERE a.mobile = #{mobile} and a.password = #{password}	and a.check_status = '1'			
+		
+		
+		
+	</select>
+	
+</mapper>

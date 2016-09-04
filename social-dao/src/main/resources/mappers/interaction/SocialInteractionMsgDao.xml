@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coaware.social.dao.interaction.SocialInteractionMsgDao">
+    
+	<sql id="socialInteractionMsgColumns">
+		a.id AS "id",
+		a.from AS "from",
+		a.to AS "to",
+		a.message AS "message",
+		a.time AS "time",
+		a.read_time AS "readTime",
+		a.status AS "status",
+		a.msg_type AS "msgType"
+	</sql>
+	
+	<select id="get" resultType="SocialInteractionMsg">
+		SELECT 
+			<include refid="socialInteractionMsgColumns"/>
+		FROM social_interaction_msg a
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SocialInteractionMsg">
+		SELECT 
+			<include refid="socialInteractionMsgColumns"/>
+		FROM social_interaction_msg a
+		 
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SocialInteractionMsg">
+		SELECT 
+			<include refid="socialInteractionMsgColumns"/>
+		FROM social_interaction_msg a
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO social_interaction_msg(
+			from,
+			to,
+			message,
+			time,
+			read_time,
+			status,
+			msg_type
+		) VALUES (
+			#{from},
+			#{to},
+			#{message},
+			#{time},
+			#{readTime},
+			#{status},
+			#{msgType}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE social_interaction_msg SET 	
+			from = #{from},
+			to = #{to},
+			message = #{message},
+			time = #{time},
+			read_time = #{readTime},
+			status = #{status},
+			msg_type = #{msgType}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM social_interaction_msg
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

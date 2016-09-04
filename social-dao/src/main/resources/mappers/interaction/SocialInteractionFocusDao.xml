@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coaware.social.dao.interaction.SocialInteractionFocusDao">
+    
+	<sql id="socialInteractionFocusColumns">
+		a.id AS "id",
+		a.area_id AS "areaId",
+		a.user_id AS "userId",
+		a.time AS "time",
+		a.content AS "content",
+		a.title AS "title",
+		a.start_time AS "startTime",
+		a.stop_time AS "stopTime",
+		a.pic AS "pic",
+		a.type AS "type"
+	</sql>
+	
+	<select id="get" resultType="SocialInteractionFocus">
+		SELECT 
+			<include refid="socialInteractionFocusColumns"/>
+		FROM social_interaction_focus a
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SocialInteractionFocus">
+		SELECT 
+			<include refid="socialInteractionFocusColumns"/>
+		FROM social_interaction_focus a
+		 
+		<where>
+			
+			<if test="title != null and title != ''">
+				AND a.title LIKE 
+					concat('%',#{title},'%')
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SocialInteractionFocus">
+		SELECT 
+			<include refid="socialInteractionFocusColumns"/>
+		FROM social_interaction_focus a
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO social_interaction_focus(
+			area_id,
+			user_id,
+			time,
+			content,
+			title,
+			start_time,
+			stop_time,
+			pic,
+			type
+		) VALUES (
+			#{areaId},
+			#{userId},
+			#{time},
+			#{content},
+			#{title},
+			#{startTime},
+			#{stopTime},
+			#{pic},
+			#{type}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE social_interaction_focus SET 	
+			area_id = #{areaId},
+			user_id = #{userId},
+			time = #{time},
+			content = #{content},
+			title = #{title},
+			start_time = #{startTime},
+			stop_time = #{stopTime},
+			pic = #{pic}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM social_interaction_focus
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

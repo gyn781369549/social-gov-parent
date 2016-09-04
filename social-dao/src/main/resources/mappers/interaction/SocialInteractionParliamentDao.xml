@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coaware.social.dao.interaction.SocialInteractionParliamentDao">
+    
+	<sql id="socialInteractionParliamentColumns">
+		a.id AS "id",
+		a.area_id AS "areaId",
+		a.user_id AS "userId",
+		a.time AS "time",
+		a.content AS "content"
+	</sql>
+	<sql id="socialAreaColumns">
+		b.id AS "socialAreaId",
+		b.name AS "name",
+		b.parent_id AS "parentId",
+		b.code AS "code",
+		b.level AS "level",
+		b.create_by AS "createBy",
+		b.create_date AS "createDate",
+		b.update_by AS "updateBy",
+		b.update_date AS "updateDate"
+	</sql>
+	<select id="findSocialArea" resultType="com.coaware.social.domain.vo.interaction.SocialInteractionParliamentVo">
+		SELECT <include refid="socialInteractionParliamentColumns"/>
+		,b.name,b.level,b.code,b.parent_id,b.id as socialAreaId
+		
+		 FROM social_interaction_parliament a
+		  right  JOIN social_area b on( a.area_id=b.id)
+		WHERE 1=1
+	</select>
+	<select id="get" resultType="SocialInteractionParliament">
+		SELECT 
+			<include refid="socialInteractionParliamentColumns"/>
+		FROM social_interaction_parliament a
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SocialInteractionParliament">
+		SELECT 
+			<include refid="socialInteractionParliamentColumns"/>
+		FROM social_interaction_parliament a
+		 
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SocialInteractionParliament">
+		SELECT 
+			<include refid="socialInteractionParliamentColumns"/>
+		FROM social_interaction_parliament a
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO social_interaction_parliament(
+			area_id,
+			user_id,
+			time,
+			content
+		) VALUES (
+			#{areaId},
+			#{userId},
+			#{time},
+			#{content}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE social_interaction_parliament SET 	
+			area_id = #{areaId},
+			user_id = #{userId},
+			time = #{time},
+			content = #{content}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM social_interaction_parliament
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

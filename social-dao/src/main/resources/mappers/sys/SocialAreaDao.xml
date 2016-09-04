@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coaware.social.dao.sys.SocialAreaDao">
+	<sql id="socialAreaColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.parent_id AS "parentId",
+		a.code AS "code",
+		a.level AS "level",
+		a.create_by AS "createBy",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy",
+		a.update_date AS "updateDate"
+	</sql>
+	
+	<select id="get" resultType="SocialArea">
+		SELECT 
+			<include refid="socialAreaColumns"/>,b.name as "parentName" 
+		FROM social_area a 
+		left join social_area b on a.parent_id = b.id 
+		
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findCommunityByLevel" resultType="SocialArea">
+		SELECT 
+			<include refid="socialAreaColumns"/>
+		FROM social_area a 
+		WHERE a.level = 1
+	</select>
+	
+	<select id="findList" resultType="SocialArea">
+		SELECT 
+			<include refid="socialAreaColumns"/>,b.name AS "parentName"
+		FROM social_area a
+		left join social_area b on a.parent_id=b.id 
+		<where>
+			a.name!=''
+			<if test="code != null and code != ''">
+				AND a.code LIKE 
+					concat('%',#{code},'%')
+					
+			</if>
+			<if test="(parentId != null and parentId != '') or parentId == 0">
+				AND a.parent_id = #{parentId} 
+			</if>
+			<if test="id != null and id != ''">
+				AND (a.id = #{id} or a.parent_id=#{id}) 
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.code DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SocialArea">
+		SELECT 
+			<include refid="socialAreaColumns"/>
+		FROM social_area a
+		order by a.id asc
+	</select>
+	
+	<insert id="insert"  useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO social_area(
+			name,
+			parent_id,
+			code,
+			level,
+			create_by,
+			create_date,
+			update_by,
+			update_date
+		) VALUES (
+			#{name},
+			#{parentId},
+			#{code},
+			#{level},
+			#{createBy},
+			#{createDate},
+			#{updateBy},
+			#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE social_area SET 	
+			name = #{name},
+			parent_id = #{parentId},
+			code = #{code},
+			level = #{level},
+			update_by = #{updateBy},
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM social_area
+		<where>
+			<if test="id!=null and id!=''">
+				id = #{id}
+			</if>
+			<if test="code!=null and code!=''">
+				code = #{code} 
+			</if>
+		</where>
+		
+	</update>
+	
+	<select id="autoCode" resultType="SocialArea">
+		SELECT 
+			<include refid="socialAreaColumns"/>
+		FROM social_area a		 
+		order by id desc LIMIT 1
+	</select>
+</mapper>

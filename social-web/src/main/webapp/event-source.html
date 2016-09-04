@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<script type="text/javascript" src="js/jquery/jquery-1.9.1.min.js"></script>
+<body>
+	<h1>Test</h1>
+	<div id="result"></div>
+	<script>
+		//1466648613573,token:F64633F6FE53D546658B290C86D4713A
+		var timestamp = 1466648613573;
+		var token = "F64633F6FE53D546658B290C86D4713A";
+		if (typeof (EventSource) !== "undefined") {
+			var source = new EventSource(
+					"http://192.168.1.45:8080/social-web/platform/social/event/socialEventQueue/test?timestamp="
+							+ timestamp + "&token=" + token);
+			source.onmessage = function(event) {
+				console.log(event.data);
+				var obj = $.parseJSON(event.data);
+				console.log("obj===>" + obj.retcode);
+				$("#result").append(event.data+ "<br />");
+			};
+		} else {
+			setInterval(
+					function() {
+						$
+								.ajax({
+									url : 'http://192.168.1.45:8080/social-web/platform/social/event/socialEventQueue/test',
+									type : 'get',
+									dataType : 'text',
+									data : {
+										"timestamp" : timestamp,
+										"token" : token
+									},
+									success : function(data) {
+										//此处直接将data对象里面的数据内容整合到页面里面
+									}
+								})
+					}, 3000);
+		}
+	</script>
+
+
+
+</body>
+</html>
+
